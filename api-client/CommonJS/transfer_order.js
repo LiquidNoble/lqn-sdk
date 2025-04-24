@@ -3,22 +3,25 @@ const { apiHost, apiKey, instrumentNobleGold } = require("./config");
 const { generateQuote } = require("./quotes");
 
 /**
- * Places a transfer order sending NobleGold to liquidnoble@lqn.app.
+ * Places a transfer order for the specified quantity of NobleGold to a counterparty.
  *
  * @param {number} quantity - Amount of NobleGold to send
- * @param {Object} session - Auth session: { token, unlockingKey, entityId, profileId, lockboxId }
+ * @param {Object} session - Auth session
+ * @param {string} counterpartyHandle - Recipient's LQN handle
  * @returns {Promise<Object>}
  */
-function placeTransferOrder(quantity, session) {
-  const counterpartyHandle = "liquidnoble@lqn.app";
-
+function placeTransferOrder(
+  quantity,
+  session,
+  counterpartyHandle = "liquidnoble@lqn.app"
+) {
   return generateQuote(
     quantity,
-    null, // order_instrument_id is null for transfer
+    null,
     instrumentNobleGold,
     session.entityId,
     session.token,
-    4, // order_type = 4 (Transfer)
+    4,
     counterpartyHandle
   ).then((quote) => {
     const url = apiHost + "/order/transfer/";
@@ -29,7 +32,7 @@ function placeTransferOrder(quantity, session) {
       unlocking_key: session.unlockingKey,
       mfa_code: "",
       activity_id: "",
-      memo: "Transfer test to Liquid Noble",
+      memo: "Transfer via SDK CLI",
     });
 
     const headers = {

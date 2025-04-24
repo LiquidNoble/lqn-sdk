@@ -38,7 +38,7 @@ Edit `config.js` to:
 - Specify hardcoded instrument IDs (or dynamically fetch them)
 
 ```js
-export const apiKey = 'your-api-key-here';
+export const apiKey = "your-api-key-here";
 export const isTestMode = true; // Use Sandbox
 ```
 
@@ -63,6 +63,16 @@ node example.js --transfer
 ```
 
 This sends **0.000005 NobleGold** to `liquidnoble@lqn.app`.
+
+You can override the default recipient and amount using CLI arguments:
+
+```bash
+node example.js --transfer --to=noble-customer@lqn.app --amount=0.01
+```
+
+This would send **0.01 NobleGold** to `noble-customer@lqn.app` instead.
+
+> 💡 NobleGold is the default instrument for transfers, but you can change this in `config.js` to support other instruments.
 
 ---
 
