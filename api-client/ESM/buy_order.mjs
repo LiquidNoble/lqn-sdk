@@ -1,10 +1,15 @@
-import { apiHost, apiKey } from './config.mjs';
-import { generateQuote } from './quotes.mjs';
+import { apiHost, apiKey } from "./config.mjs";
+import { generateQuote } from "./quotes.mjs";
 
 /**
  * Place a Buy Order
  */
-export async function placeBuyOrder(quantity, buyInstrumentId, paymentInstrumentId, session) {
+export async function placeBuyOrder(
+  quantity,
+  buyInstrumentId,
+  paymentInstrumentId,
+  session
+) {
   const quote = await generateQuote(
     quantity,
     buyInstrumentId,
@@ -13,14 +18,14 @@ export async function placeBuyOrder(quantity, buyInstrumentId, paymentInstrument
     session.token
   );
 
-  const url = apiHost + '/order/buy/';
+  const url = apiHost + "/order/buy/";
   const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${session.token}`
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${session.token}`,
   };
 
   if (apiKey) {
-    headers['x-api-key'] = apiKey;
+    headers["x-api-key"] = apiKey;
   }
 
   const body = JSON.stringify({
@@ -28,17 +33,17 @@ export async function placeBuyOrder(quantity, buyInstrumentId, paymentInstrument
     profile_id: session.profileId,
     quote_id: quote.quote_id,
     unlocking_key: session.unlockingKey,
-    mfa_code: '',
-    activity_id: ''
+    mfa_code: "",
+    activity_id: "",
   });
 
   const response = await fetch(url, {
-    method: 'POST',
+    method: "POST",
     headers,
-    body
+    body,
   });
 
   const data = await response.json();
-  if (!response.ok) throw new Error(data.message || 'Buy order failed');
+  if (!response.ok) throw new Error(data.message || "Buy order failed");
   return data;
 }
